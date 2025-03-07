@@ -4,6 +4,7 @@ const Home = () => {
         <div>
             <p className="text-9xl font-semibold">
                 This is Home
+                and also rechecking !
             </p>
         </div>
     );
