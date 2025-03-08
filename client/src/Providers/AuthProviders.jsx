@@ -29,17 +29,18 @@ const AuthProvider = ({ children }) => {
     };
 
     // save users data
-    // const saveUser = async (user) => {
-    //     const currentUser = {
-    //         image: user?.photoURL,
-    //         email: user?.email,
-    //         status: "Verified",
-    //         role: 'guest'
-    //     };
+    const saveUser = async (user) => {
+        const currentUser = {
+            image: user?.photoURL,
+            name: user?.displayName,
+            email: user?.email,
+            status: "Verified",
+            role: 'guest'
+        };
 
-    //     const { data } = await axios.put(`${import.meta.env.VITE_SERVER_URL}/usersData`, currentUser);
-    //     return data;
-    // };
+        const { data } = await axios.put(`${import.meta.env.VITE_SERVER_URL}/usersData`, currentUser);
+        return data;
+    };
 
 
 
@@ -47,10 +48,10 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser);
-            // console.log('stateUser', currentUser);
-            // if (currentUser) {
-            //     saveUser(currentUser);
-            // }
+            console.log('Current User', currentUser);
+            if (currentUser) {
+                saveUser(currentUser);
+            }
             setLoading(false);
         });
 

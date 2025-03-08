@@ -2,10 +2,8 @@
 const Home = () => {
     return (
         <div>
-            <p className="text-9xl font-semibold">
-                This is Home
-                and also rechecking !
-            </p>
+            <p className="h-[100dvh] "> This is Home</p>
+            <p className="h-[100dvh] ">and also rechecking !</p>
         </div>
     );
 };
