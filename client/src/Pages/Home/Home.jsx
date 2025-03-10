@@ -1,9 +1,24 @@
+import HomeLoading from "../Loading/HomeLoading";
+import Banner from "../../Components/Home/Home/Banner";
+import { useEffect, useState } from "react";
+import AllData from "../../Components/Home/Home/AllData";
 
 const Home = () => {
+    const [isLoadingComplete, setIsLoadingComplete] = useState(false);
+
+    useEffect(() => {
+        // Wait for HomeLoading animation to complete (4 seconds)
+        const timer = setTimeout(() => {
+            setIsLoadingComplete(true);
+        }, 4000);
+
+        return () => clearTimeout(timer);
+    }, []);
     return (
-        <div>
-            <p className="h-[100dvh] "> This is Home</p>
-            <p className="h-[100dvh] ">and also rechecking !</p>
+        <div className="relative">
+            {!isLoadingComplete && <HomeLoading />}
+            {isLoadingComplete && <Banner />}
+            {isLoadingComplete && <AllData />}
         </div>
     );
 };

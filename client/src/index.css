@@ -30,6 +30,15 @@ body {
     }
 
 
+    /* for hidden scrollbarY */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scrollbar-hide {
+        scrollbar-width: none;
+    }
+
 
     /* input box manuall css */
     input:-webkit-autofill,
