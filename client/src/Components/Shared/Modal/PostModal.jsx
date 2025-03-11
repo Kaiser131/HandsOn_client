@@ -1,15 +1,7 @@
-
+import { useAnimate, useDragControls, useMotionValue, motion } from "framer-motion";
 import useMeasure from "react-use-measure";
-import {
-    useDragControls,
-    useMotionValue,
-    useAnimate,
-    motion,
-} from "framer-motion";
 
-
-
-const EventModal = ({ eventModal, setEventModal, children, setCategory }) => {
+const PostModal = ({ postModal, setPostModal, children, setLevel }) => {
     const [scope, animate] = useAnimate();
     const [drawerRef, { height }] = useMeasure();
 
@@ -27,13 +19,12 @@ const EventModal = ({ eventModal, setEventModal, children, setCategory }) => {
             y: [yStart, height],
         });
 
-        setCategory('');
-        setEventModal(false);
+        setLevel('');
+        setPostModal(false);
     };
-
     return (
         <>
-            {eventModal && (
+            {postModal && (
                 <motion.div
                     ref={scope}
                     initial={{ opacity: 0 }}
@@ -87,5 +78,4 @@ const EventModal = ({ eventModal, setEventModal, children, setCategory }) => {
     );
 };
 
-
-export default EventModal;
+export default PostModal;

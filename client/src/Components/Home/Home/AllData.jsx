@@ -13,19 +13,52 @@ import CreateButton from "../../Shared/Buttons/CreateButton";
 import FilterDropdown from "../AllProduct/FilterDropdown";
 import { useState } from "react";
 import EventModal from "../../Shared/Modal/EventModal";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../Hooks/Axios/useAxiosSecure";
+import useAuth from "../../../Hooks/Auth/useAuth";
+import toast from "react-hot-toast";
+import PostModal from "../../Shared/Modal/PostModal";
 
 const AllData = () => {
 
+    const axiosSecure = useAxiosSecure();
+    const { user } = useAuth();
+
     const [filterDropDownData, setFilterDropdownData] = useState('');
-    const [eventModalOpen, setEventModalOpen] = useState(false);
-    const [category, setCategory] = useState('');
+    const [eventModal, setEventModal] = useState(false);
+    const [postModal, setPostModal] = useState(false);
+    const [category, setCategory] = useState();
+    const [level, setLevel] = useState();
     const filterDropdownOptionsData = [
         { name: 'Category', icon: MdCategory },
         { name: 'Location', icon: FaMapMarkerAlt },
         { name: 'Availability', icon: AiOutlineCheckCircle },
     ];
 
-    const handleEventData = (e) => {
+    const { data: userData = [] } = useQuery({
+        queryKey: ['userData', user?.email],
+        queryFn: async () => {
+            const { data } = await axiosSecure.get(`/user/${user?.email}`);
+            return data;
+        }
+    });
+
+
+    const { mutateAsync } = useMutation({
+        mutationFn: async (eventFeedData) => {
+            const { data } = await axiosSecure.post('/eventFeed', eventFeedData);
+            return data;
+        },
+        onSuccess: () => {
+            toast.success('Successfully Added !');
+            setEventModal(false);
+            setPostModal(false);
+        }
+    });
+
+
+
+    const handleEventData = async (e) => {
         e.preventDefault();
         const form = e.target;
         const title = form.title.value;
@@ -33,18 +66,55 @@ const AllData = () => {
         const date = form.date.value;
         const time = form.time.value;
         const location = form.location.value;
+        const createdBy = user?.email;
 
-        console.log(
+        if (!category) {
+            return toast.error('Please Select Category!');
+        }
+        const eventData = {
+            postType: 'event',
+            title,
+            description,
+            date,
+            createdBy,
+            time,
+            location,
+            category,
+            organization: userData?.organization
+        };
+
+        await mutateAsync(eventData);
+        form.reset();
+    };
+
+
+    const handlePostData = async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const title = form.title.value;
+        const description = form.description.value;
+        const date = form.date.value;
+        const time = form.time.value;
+        const createdBy = user?.email;
+
+        if (!level) {
+            return toast.error('Please Select Level Of Your Urgency Level !');
+        }
+
+        const postData = {
+            postType: 'post',
             title,
             description,
             date,
             time,
-            location,
-        );
-
-        // form.reset();
-
+            createdBy,
+            level,
+            organization: userData?.organization
+        };
+        await mutateAsync(postData);
+        form.reset();
     };
+
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -77,11 +147,11 @@ const AllData = () => {
                         />
                     </div>
 
-                    <div onClick={() => setEventModalOpen(true)}>
+                    <div onClick={() => setEventModal(true)}>
                         <CreateButton text='Create Event' Icon={MdPostAdd} />
                     </div>
 
-                    <div>
+                    <div onClick={() => setPostModal(true)}>
                         <CreateButton text='Create Post' Icon={FaHandsHelping} />
                     </div>
 
@@ -96,7 +166,7 @@ const AllData = () => {
                 </div>
 
                 {/* create Event modal */}
-                <EventModal open={eventModalOpen} setOpen={setEventModalOpen}>
+                <EventModal setCategory={setCategory} eventModal={eventModal} setEventModal={setEventModal}  >
                     <div className="mx-auto max-w-2xl space-y-4 px-5">
 
                         <form onSubmit={handleEventData}>
@@ -105,27 +175,27 @@ const AllData = () => {
 
                                 <div className="flex flex-col">
                                     <label htmlFor="">Title</label>
-                                    <input type="text" name="title" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                    <input required type="text" name="title" className="bg-[#DFDFF0] border-b outline-none border-black" />
                                 </div>
 
                                 <div className="flex flex-col">
                                     <label htmlFor="">Description</label>
-                                    <input type="text" name="description" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                    <input required type="text" name="description" className="bg-[#DFDFF0] border-b outline-none border-black" />
                                 </div>
 
                                 <div className="flex flex-col">
                                     <label htmlFor="">Date</label>
-                                    <input type="date" name="date" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                    <input required type="date" name="date" className="bg-[#DFDFF0] border-b outline-none border-black" />
                                 </div>
 
                                 <div className="flex flex-col">
                                     <label htmlFor="">Time</label>
-                                    <input type="time" name="time" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                    <input required type="time" name="time" className="bg-[#DFDFF0] border-b outline-none border-black" />
                                 </div>
 
                                 <div className="flex flex-col">
                                     <label htmlFor="">Location</label>
-                                    <input type="text" name="location" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                    <input required type="text" name="location" className="bg-[#DFDFF0] border-b outline-none border-black" />
                                 </div>
 
                                 <div>
@@ -155,6 +225,64 @@ const AllData = () => {
 
                     </div>
                 </EventModal>
+
+
+                {/* post Modal */}
+                <PostModal postModal={postModal} setPostModal={setPostModal} setLevel={setLevel}>
+
+                    <div className="mx-auto max-w-2xl space-y-4 px-5">
+                        <form onSubmit={handlePostData}>
+                            <h1 className=" text-[clamp(20px,4vw,36px)]  text-center py-5">Request For Help</h1>
+                            <div className="grid grid-cols-2 gap-5">
+
+                                <div className="flex flex-col">
+                                    <label htmlFor="">Title</label>
+                                    <input required type="text" name="title" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                </div>
+
+                                <div className="flex flex-col">
+                                    <label htmlFor="">Description</label>
+                                    <input required type="text" name="description" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                </div>
+
+
+                                <div className="flex flex-col">
+                                    <label htmlFor="">Location</label>
+                                    <input type="text" name="location" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                </div>
+
+                                <div className="flex flex-col">
+                                    <label htmlFor="">Date</label>
+                                    <input type="date" name="date" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                </div>
+
+
+                                <div className="flex flex-col">
+                                    <label htmlFor="">Time</label>
+                                    <input type="time" name="time" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                </div>
+
+                                <div className="flex flex-col">
+                                    <label htmlFor="">Urgency Level</label>
+                                    <select onChange={(e) => setLevel(e.target.value)} className="outline-none bg-[#DFDFF0] px-4 py-2 rounded" >
+                                        <option className="outline-none bg-[#D3D3F0]" disabled selected>Select</option>
+                                        <option className="outline-none bg-[#D3D3F0]" value="Low">Low</option>
+                                        <option className="outline-none bg-[#D3D3F0]" value="Medium">Medium</option>
+                                        <option className="outline-none bg-[#D3D3F0]" value="Urgent">Urgent</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button className="px-8 py-2 border border-black">
+                                Post
+                            </button>
+
+                        </form>
+                    </div>
+
+
+                </PostModal>
+
 
             </div>
 

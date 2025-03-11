@@ -50,25 +50,25 @@ const HomeLoading = () => {
                     {/* Floating Images - Responsive Positioning */}
                     <motion.img
                         variants={item}
-                        className="absolute md:w-60 md:h-60 w-32 h-32 object-contain left-[10%] top-[25%]"
+                        className="absolute md:w-60 md:h-60 w-32 h-32 object-contain left-[10%] top-[25%] md:top-[10%]"
                         src={image_5}
                         alt=""
                     />
                     <motion.img
                         variants={item}
-                        className="absolute md:w-60 md:h-60 w-24 h-24 object-contain right-[15%] top-[30%]"
+                        className="absolute md:w-60 md:h-60 w-24 h-24 object-contain right-[15%] top-[30%] md:top-[20%]"
                         src={image_4}
                         alt=""
                     />
                     <motion.img
                         variants={item}
-                        className="absolute md:w-60 md:h-60 w-32 h-32 object-contain bottom-[20%] left-[10%]"
+                        className="absolute md:w-60 md:h-60 w-32 h-32 object-contain bottom-[20%] left-[10%] md:bottom-[15%]"
                         src={image_2}
                         alt=""
                     />
                     <motion.img
                         variants={item}
-                        className="absolute md:w-60 md:h-60 w-28 h-28 object-contain bottom-[25%] right-[10%]"
+                        className="absolute md:w-60 md:h-60 w-28 h-28 object-contain bottom-[25%] right-[10%] md:bottom-[5%]"
                         src={image_3}
                         alt=""
                     />
