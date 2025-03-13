@@ -53,6 +53,9 @@ async function run() {
     try {
         const db = client.db('HandsOn');
         const usersCollection = db.collection('users');
+        const eventsFeedDataCollection = db.collection('eventFeedDatas');
+        const eventAttendeeListsCollection = db.collection('attendeeLists');
+        const commentsCollection = db.collection('comments');
 
 
         // verify admin middleware
@@ -106,7 +109,6 @@ async function run() {
                         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
                     })
                     .send({ success: true });
-                console.log('Logout successful');
             } catch (err) {
                 res.status(500).send(err);
             }
@@ -117,23 +119,14 @@ async function run() {
 
 
         // save a user data in db
-        app.put('/user', async (req, res) => {
+        app.put('/usersData', async (req, res) => {
             const user = req.body;
 
             const query = { email: user?.email };
             // check if user already exists in db
             const isExist = await usersCollection.findOne(query);
             if (isExist) {
-                if (user.status === 'Requested') {
-                    // if existing user try to change his role
-                    const result = await usersCollection.updateOne(query, {
-                        $set: { status: user?.status },
-                    });
-                    return res.send(result);
-                } else {
-                    // if existing user login again
-                    return res.send(isExist);
-                }
+                return res.send(isExist);
             }
 
             // save user for the first time
@@ -148,7 +141,119 @@ async function run() {
             res.send(result);
         });
 
+        // get all usersData
+        app.get('/usersData', async (req, res) => {
+            const result = await usersCollection.find().toArray();
+            res.send(result);
+        });
 
+
+        // get single user data
+        app.get('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await usersCollection.findOne(query);
+            res.send(result);
+        });
+
+        // add basic data and modify
+        app.patch('/basicUpdate/:email', async (req, res) => {
+            const email = req.params.email;
+            const updateData = req.body;
+            const query = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    name: updateData?.name,
+                    phone: updateData?.phone,
+                    location: updateData?.location,
+                    bio: updateData?.bio,
+                    image: updateData?.image,
+                },
+            };
+            const result = await usersCollection.updateOne(query, updateDoc, options);
+            res.send(result);
+
+        });
+
+        // add and update skills
+        app.patch('/skillUpdate/:email', async (req, res) => {
+            const email = req.params.email;
+            const updateData = req.body;
+            const query = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    causes: updateData?.causes,
+                    skills: updateData?.skills,
+                    volunterType: updateData?.volunterType,
+                },
+            };
+
+            const result = await usersCollection.updateOne(query, updateDoc, options);
+            res.send(result);
+
+        });
+
+        // add and update skills
+        app.patch('/preferanceUpdate/:email', async (req, res) => {
+            const email = req.params.email;
+            const updateData = req.body;
+            const query = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    availability: updateData?.availability,
+                    preferredLocation: updateData?.preferredLocation,
+                    language: updateData?.language,
+                },
+            };
+
+            const result = await usersCollection.updateOne(query, updateDoc, options);
+            res.send(result);
+
+        });
+
+
+        // post all the events for the eventFeed
+        app.post('/eventFeed', async (req, res) => {
+            const eventFeedData = req.body;
+            const result = await eventsFeedDataCollection.insertOne(eventFeedData);
+            res.send(result);
+        });
+
+        // get all eventFeedData
+        app.get('/eventFeed', async (req, res) => {
+            const result = await eventsFeedDataCollection.find().toArray();
+            res.send(result);
+        });
+
+
+        // event attendeeList add
+        app.patch('/eventAttendeeLists', async (req, res) => {
+            const attendeeList = req.body;
+            const query = { eventCode: attendeeList.eventCode };
+            const isExists = await eventAttendeeListsCollection.findOne(query);
+            if (isExists) {
+                return res.send({ message: 'Exists', isExists });
+            }
+            const result = await eventAttendeeListsCollection.insertOne(attendeeList);
+            res.send(result);
+        });
+
+        // get all attendeeLists
+        app.get('/eventAttendeeLists', async (req, res) => {
+            const result = await eventAttendeeListsCollection.find().toArray();
+            res.send(result);
+        });
+
+
+        // add comments
+        app.post('/comments', async (req, res) => {
+            const comments = req.body;
+            const result = await commentsCollection.insertOne(comments);
+            res.send(result);
+        });
 
 
 
