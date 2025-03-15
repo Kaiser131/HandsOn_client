@@ -37,7 +37,7 @@ const Loading = () => {
     }, []);
 
     return (
-        <div className="flex text-black justify-center items-center h-screen font-lexend bg-[#D8D8D8] text-4xl">
+        <div className="flex text-black justify-center items-center h-screen font-lexend bg-[#DFDFF0] text-4xl">
             {scrambledText}
         </div>
     );

@@ -1,19 +1,38 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/Axios/useAxiosSecure";
 import useAuth from "../../Hooks/Auth/useAuth";
+import { IoMdTrash } from "react-icons/io";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const Attends = () => {
 
     const { user } = useAuth();
 
     const axiosSecure = useAxiosSecure();
-    const { data = [] } = useQuery({
+    const { data = [], refetch } = useQuery({
         queryKey: ['myEvents', user?.email],
         queryFn: async () => {
             const { data } = await axiosSecure.get(`/eventAttendeeList/${user?.email}`);
             return data;
         }
     });
+
+    const { mutateAsync } = useMutation({
+        mutationFn: async (id) => {
+            const { data } = await axiosSecure.delete(`/attendeeList/${id}`);
+            return data;
+        },
+        onSuccess: () => {
+            refetch();
+            toast.success('Event Deleted');
+        }
+    });
+
+    const handleDelete = async (id) => {
+        await mutateAsync(id);
+    };
+
 
     return (
         <div>
@@ -39,10 +58,13 @@ const Attends = () => {
                             <td className="p-2 text-[clamp(8px,2vw,15px)]">{team?.location}</td>
                             <td className="p-2 text-[clamp(8px,2vw,15px)]">{team?.date}</td>
                             <td className="p-2 text-[clamp(8px,2vw,15px)]">{team?.time}</td>
-                            <td className="p-2 hidden md:block">
-                                <button className="px-2 py-1 text-[clamp(8px,2vw,15px)] bg-blue-500 text-white rounded hover:bg-blue-600">
-                                    X
-                                </button>
+                            <td className="p-2 hidden md:flex text-center">
+                                <motion.button
+                                    whileTap={{ scale: 1.3 }}
+                                    onClick={() => handleDelete(team?._id)}
+                                    className="px-2 py-1 text-[clamp(8px,2vw,15px) pb-3 text-2xl rounded">
+                                    <IoMdTrash />
+                                </motion.button>
                             </td>
                         </tr>
                     ))}

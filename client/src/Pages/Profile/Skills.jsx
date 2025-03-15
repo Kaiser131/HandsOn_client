@@ -3,6 +3,7 @@ import useAuth from "../../Hooks/Auth/useAuth";
 import useAxiosSecure from "../../Hooks/Axios/useAxiosSecure";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const Skills = () => {
 
@@ -94,13 +95,32 @@ const Skills = () => {
 
 
                     <div className="flex justify-center my-10">
-                        <button className={`${edit ? 'block' : 'hidden'} `}>Submit</button>
+                        <motion.button
+                            whileHover={{ backgroundColor: "black", color: "white", }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                            className={`
+                            ${edit ? 'block' : 'hidden'}
+                            px-8 py-2 border font-sirin border-black`}
+                        >
+                            Submit
+                        </motion.button>
                     </div>
 
                 </form>
 
-                <div className="flex mt-10 justify-center">
-                    <button className={`${edit ? 'hidden' : 'block'}`} onClick={() => setEdit(!edit)}>Edit</button>
+                <div className="flex justify-center my-10">
+                    <motion.button
+                        onClick={() => setEdit(!edit)}
+                        whileHover={{ backgroundColor: "black", color: "white", }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className={`
+                            ${edit ? 'hidden' : 'block'}
+                            px-8 py-2 border font-sirin border-black`}
+                    >
+                        Edit
+                    </motion.button>
                 </div>
 
 

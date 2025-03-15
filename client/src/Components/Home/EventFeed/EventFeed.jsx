@@ -4,6 +4,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../Hooks/Axios/useAxiosSecure";
 import toast from "react-hot-toast";
 import Loading from "../../../Pages/Loading/Loading";
+import { motion } from "framer-motion";
+
 
 const EventFeed = ({ joinEvent, eventFeedData, userData }) => {
 
@@ -134,7 +136,15 @@ const EventFeed = ({ joinEvent, eventFeedData, userData }) => {
 
 
                                         {/* join Event Button */}
-                                        <button onClick={() => joinEvent(got)} className="px-4 py-2 border border-black">Join Event</button>
+                                        <motion.button
+                                            onClick={() => joinEvent(got)}
+                                            whileHover={{ backgroundColor: "black", color: "white", }}
+                                            whileTap={{ scale: 0.95 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="px-8 py-2 border w-full font-sirin border-black"
+                                        >
+                                            Join Event
+                                        </motion.button>
                                     </div>
                                 </div>
                             </div>
@@ -236,16 +246,31 @@ const EventFeed = ({ joinEvent, eventFeedData, userData }) => {
                                         </div>
 
                                         {/* addComment Button */}
-                                        <button onClick={() => handleCommentOpen(got?.postCode)}
-                                            className={`${comment && commentCode === got?.postCode ? 'hidden' : ''} 
-                                        px-4 py-2 border border-black`}>
-                                            Add a Comment</button>
+                                        <motion.button
+                                            onClick={() => handleCommentOpen(got?.postCode)}
+                                            whileHover={{ backgroundColor: "black", color: "white", }}
+                                            whileTap={{ scale: 0.95 }}
+                                            transition={{ duration: 0.2 }}
+                                            className={`
+                                                ${comment && commentCode === got?.postCode ? 'hidden' : ''} 
+                                                px-8 py-2 border w-full font-sirin border-black`}
+                                        >
+                                            Add Comment
+                                        </motion.button>
+
 
                                         {/*Comment close Button */}
-                                        <button onClick={() => handleCommentOpen(got?.postCode)}
-                                            className={`${comment && commentCode === got?.postCode ? '' : 'hidden'}
-                                        px-4 py-2 border border-black`}>
-                                            Close</button>
+                                        <motion.button
+                                            onClick={() => handleCommentOpen(got?.postCode)}
+                                            whileHover={{ backgroundColor: "black", color: "white", }}
+                                            whileTap={{ scale: 0.95 }}
+                                            transition={{ duration: 0.2 }}
+                                            className={`
+                                                ${comment && commentCode === got?.postCode ? '' : 'hidden'}
+                                                px-8 py-2 border w-full font-sirin border-black`}
+                                        >
+                                            Close
+                                        </motion.button>
 
 
                                     </div>

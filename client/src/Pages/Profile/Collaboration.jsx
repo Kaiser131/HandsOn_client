@@ -49,16 +49,17 @@ const Collaboration = () => {
         const location = form.location.value;
         const bio = form.bio.value;
         const image = form.image.files[0];
-        const imageURL = await imageUpload(image);
+        const logo = await imageUpload(image);
         const uniqueCode = crypto.randomUUID();
         const teamData = {
             teamName,
             location,
             bio,
             type,
-            imageURL,
+            logo,
             teamCode: uniqueCode,
-            category
+            category,
+            teamOwner: user?.email
         };
         await addTeamData(teamData);
         form.reset();

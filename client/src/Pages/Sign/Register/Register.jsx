@@ -6,6 +6,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useAuth from '../../../Hooks/Auth/useAuth';
+import EncryptButton from '../../../Components/Shared/Buttons/EncryptBtn';
 
 const Register = () => {
 
@@ -96,6 +97,7 @@ const Register = () => {
                             </div>
                             <span className=''>
                                 <button className='px-5 py-2 border border-white border-opacity-50'>Sign Up</button>
+                                <EncryptButton name='Sign Up' logo={<FaLock />} />
                             </span>
                         </div>
                     </div>

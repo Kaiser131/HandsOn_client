@@ -4,6 +4,7 @@ import useAxiosSecure from "../../Hooks/Axios/useAxiosSecure";
 import { useState } from "react";
 import { imageUpload } from "../../Utils/ImageUpload";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const BasicInfo = () => {
 
@@ -109,13 +110,33 @@ const BasicInfo = () => {
 
 
                     <div className="flex justify-center my-10">
-                        <button className={`${edit ? 'block' : 'hidden'} `}>Submit</button>
+                        <motion.button
+                            onClick={handleEdit}
+                            whileHover={{ backgroundColor: "black", color: "white", }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                            className={`
+                            ${edit ? 'block' : 'hidden'}
+                            px-8 py-2 border font-sirin border-black`}
+                        >
+                            Submit
+                        </motion.button>
                     </div>
 
                 </form>
 
                 <div className="flex mt-10 justify-center">
-                    <button className={`${edit ? 'hidden' : 'block'}`} onClick={handleEdit}>Edit</button>
+                    <motion.button
+                        onClick={handleEdit}
+                        whileHover={{ backgroundColor: "black", color: "white", }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className={`
+                            ${edit ? 'hidden' : 'block'}
+                            px-8 py-2 border font-sirin border-black`}
+                    >
+                        Edit
+                    </motion.button>
                 </div>
 
 

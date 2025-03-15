@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import PostModal from "../../Shared/Modal/PostModal";
 import { imageUpload } from "../../../Utils/ImageUpload";
 import EventFeed from "../EventFeed/EventFeed";
+import WhiteFillupBtn from "../../Shared/Buttons/WhiteFillupBtn";
 
 const AllData = () => {
 
@@ -284,9 +285,17 @@ const AllData = () => {
 
                             </div>
 
-                            <button className="px-8 py-2 border border-black">
-                                Post
-                            </button>
+                            <div className="flex justify-center my-5">
+                                <motion.button
+                                    whileHover={{ backgroundColor: "black", color: "white", }}
+                                    whileTap={{ scale: 0.95 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="px-8 py-2 border w-full font-sirin border-black"
+                                >
+                                    Post
+                                </motion.button>
+                            </div>
+
 
                         </form>
 
@@ -349,9 +358,16 @@ const AllData = () => {
 
                             </div>
 
-                            <button className="px-8 py-2 border border-black">
-                                Post
-                            </button>
+                            <div className="flex justify-center my-5">
+                                <motion.button
+                                    whileHover={{ backgroundColor: "black", color: "white", }}
+                                    whileTap={{ scale: 0.95 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="px-8 py-2 border w-full font-sirin border-black"
+                                >
+                                    Post
+                                </motion.button>
+                            </div>
 
                         </form>
                     </div>

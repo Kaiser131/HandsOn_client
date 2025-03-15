@@ -6,6 +6,7 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useAuth from '../../../Hooks/Auth/useAuth';
+import EncryptButton from '../../../Components/Shared/Buttons/EncryptBtn';
 
 const Login = () => {
 
@@ -99,8 +100,8 @@ const Login = () => {
                                 <input required className='glass w-full py-4 pl-4 pr-16 text-left outline-none rounded-sm font-raleway text-sm' placeholder='Password' type={passText ? "password" : "text"} name="password" />
                                 <span onClick={() => setPassText(!passText)} className='absolute right-5 top-4'> {passText ? <FaLock /> : <FaLockOpen />} </span>
                             </div>
-                            <span className=''>
-                                <button className='px-5 py-2 border border-white border-opacity-50'>Login</button>
+                            <span >
+                                <EncryptButton name='Login' logo={<FaLock />} />
                             </span>
                         </div>
                     </div>
