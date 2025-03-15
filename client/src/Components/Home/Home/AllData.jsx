@@ -28,14 +28,14 @@ const AllData = () => {
     const { user } = useAuth();
 
     const [filterDropDownData, setFilterDropdownData] = useState('');
+    const [search, setSearch] = useState('');
     const [eventModal, setEventModal] = useState(false);
     const [postModal, setPostModal] = useState(false);
     const [category, setCategory] = useState();
     const [level, setLevel] = useState();
     const filterDropdownOptionsData = [
-        { name: 'Category', icon: MdCategory },
-        { name: 'Location', icon: FaMapMarkerAlt },
-        { name: 'Availability', icon: AiOutlineCheckCircle },
+        { name: 'Post', icon: MdCategory },
+        { name: 'Event', icon: FaMapMarkerAlt },
     ];
 
 
@@ -50,9 +50,9 @@ const AllData = () => {
 
     // eventFeedData
     const { data: eventFeedData = [], refetch } = useQuery({
-        queryKey: ['eventFeedData'],
+        queryKey: ['eventFeedData', category],
         queryFn: async () => {
-            const { data } = await axiosSecure.get('/eventFeed');
+            const { data } = await axiosSecure.get(`/eventFeed?category=${category}&search=${search}`);
             return data;
         }
     });
@@ -154,11 +154,13 @@ const AllData = () => {
     };
 
 
+
     const handleSearch = (e) => {
         e.preventDefault();
         const form = e.target;
-
-        // form.reset();
+        const search = form.search.value;
+        setSearch(search);
+        form.reset();
     };
 
 

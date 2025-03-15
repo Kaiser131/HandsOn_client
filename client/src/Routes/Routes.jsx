@@ -14,6 +14,8 @@ import Availablity from "../Pages/Profile/Availablity";
 import Collaboration from "../Pages/Profile/Collaboration";
 import AllTeams from "../Pages/Profile/AllTeams";
 import Attends from "../Pages/Profile/Attends";
+import AnimateRoutes from "../Pages/Animate/AnimateRoutes";
+import PrivateRoutes from "./PrivateRoutes";
 
 const router = createBrowserRouter([
     {
@@ -36,9 +38,13 @@ const router = createBrowserRouter([
     },
     {
         path: 'profile',
-        element: <ScrollTop>
-            <Profile />
-        </ScrollTop>,
+        element: <AnimateRoutes>
+            <PrivateRoutes>
+                <ScrollTop>
+                    <Profile />
+                </ScrollTop>
+            </PrivateRoutes>
+        </AnimateRoutes>,
         children: [
             {
                 path: 'basic',

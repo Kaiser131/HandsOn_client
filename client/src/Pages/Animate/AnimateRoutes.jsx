@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import useAuth from '../../hooks/useAuth';
 import Loading from '../Loading/Loading';
+import useAuth from '../../Hooks/Auth/useAuth';
 
 
 const AnimateRoutes = ({ children }) => {

@@ -88,19 +88,19 @@ const Collaboration = () => {
 
                 <form onSubmit={handleSubmit} className="my-10 font-raleway md:max-w-[1000px] w-full mx-auto">
                     <div className="flex justify-center my-10">
-                        <img className="md:size-20 size-14 rounded" src={image} alt="mo image found" />
+                        <img className="md:size-20 size-14 rounded" src={userData.image} alt="mo image found" />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 space-y-5 ">
 
                         <div className="flex flex-col space-y-2 mt-5 col-span-2 md:col-span-1 ">
                             <label className="text-sm md:text-base font-bold" htmlFor="name">Name</label>
-                            <input required type="text" name="teamName" className="bg-[#DFDFF0] text-[9px] placeholder:font-light md:text-base outline-none placeholder:text-black border-b border-black disabled:cursor-not-allowed" disabled={edit === false} placeholder={teamName || 'Team Name'} />
+                            <input required type="text" name="teamName" className="bg-[#DFDFF0] text-[9px] placeholder:font-light md:text-base outline-none placeholder:text-black border-b border-black disabled:cursor-not-allowed" disabled={edit === false} placeholder={'Team Name'} />
                         </div>
 
                         <div className="flex flex-col space-y-2 col-span-2 md:col-span-1">
                             <label className="text-sm md:text-base font-bold" htmlFor="location">Location</label>
-                            <input required type="text" name="location" className="bg-[#DFDFF0] text-[9px] placeholder:font-light md:text-base outline-none placeholder:text-black border-b border-black disabled:cursor-not-allowed" disabled={edit === false} placeholder={from ? from : 'Please add Location'} />
+                            <input required type="text" name="location" className="bg-[#DFDFF0] text-[9px] placeholder:font-light md:text-base outline-none placeholder:text-black border-b border-black disabled:cursor-not-allowed" disabled={edit === false} placeholder={'Please add Location'} />
                         </div>
 
                         <div className="flex flex-col space-y-2 col-span-2 md:col-span-1">
@@ -146,7 +146,7 @@ const Collaboration = () => {
 
                         <div className="flex flex-col space-y-2 col-span-2 md:col-span-1">
                             <label className="text-sm md:text-base font-bold" htmlFor="bio">Bio</label>
-                            <input required type="text" disabled={edit === false} name="bio" className="bg-[#DFDFF0] text-[9px] placeholder:font-light md:text-base outline-none placeholder:text-black border-b border-black disabled:cursor-not-allowed " placeholder={bio ? bio : 'Please Add Your Bio'} />
+                            <input required type="text" disabled={edit === false} name="bio" className="bg-[#DFDFF0] text-[9px] placeholder:font-light md:text-base outline-none placeholder:text-black border-b border-black disabled:cursor-not-allowed " placeholder={'Please Add Your Bio'} />
                         </div>
 
 

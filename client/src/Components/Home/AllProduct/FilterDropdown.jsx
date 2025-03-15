@@ -16,9 +16,9 @@ const FilterDropdown = ({ dropBtnText, dropDownOptionsData, setCurrentPage, setF
     };
 
     const handleCLear = () => {
-        // setFilterDropdownData(''),
+        setFilterDropdownData('');
         // setSearch('');
-        // setOpen(false);
+        setOpen(false);
     };
 
 

@@ -2,9 +2,15 @@ import gsap from "gsap";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useWindowScroll } from "react-use";
-import { FaOpencart } from "react-icons/fa6";
+import { FaOpencart, FaUser } from "react-icons/fa6";
 import { motion } from 'framer-motion';
 import useAuth from "../../../Hooks/Auth/useAuth";
+import { Menu, X } from "lucide-react";
+import ProfileButton from "../Buttons/ProfileButton";
+import { AiOutlineMenu } from "react-icons/ai";
+import { GiCrossedAxes } from "react-icons/gi";
+import { HiOutlineHome } from "react-icons/hi";
+
 
 const Navbar = () => {
 
@@ -14,19 +20,14 @@ const Navbar = () => {
     const navContainerRef = useRef(null);
     const navItems = [
         { name: 'Home', destination: '/' },
-        { name: 'Products', destination: '/products' },
-        { name: 'Menu', destination: 'dashboard' },
     ];
-
-
-
 
     // scroll implementation using react-use
     const [lastScrollY, setLastScrollY] = useState(0);
     const [isNavVisible, setIsNavVisible] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     const { y: currentScrollY } = useWindowScroll();
-
 
 
     useEffect(() => {
@@ -78,28 +79,56 @@ const Navbar = () => {
                                 }
 
                             }}
-                            className="font-kaushan text-white text-3xl">HandsOn</motion.button></Link>
+                            className={`font-kaushan  text-3xl ${location?.pathname === '/' && currentScrollY === 0 ? 'text-black' : 'text-white'}`}>HandsOn</motion.button></Link>
                     </div>
 
 
 
 
                     <motion.div
-                        className={`flex  h-full items-center`}>
+                        className={`flex  h-full items-center ${location?.pathname === '/' && currentScrollY === 0 ? 'text-black' : 'text-white'}`}>
 
-                        <div className=" hidden md:block text-white ">
+                        <div className={` hidden md:block`}>
                             {navItems.map((nav, idx) => (
                                 <Link key={idx} to={nav?.destination} >
-                                    <button className="uppercase nav-hover-btn">{nav?.name}</button>
+                                    <button className={`uppercase nav-hover-btn`}>{nav?.name}</button>
                                 </Link>
                             ))}
                         </div>
 
-                        <Link className="nav-hover-btn md:hidden" to='/dashboard'>Menus</Link>
-                        <Link className="nav-hover-btn" to='dashboard/myCart'><FaOpencart className="text-2xl md:text-4xl" /></Link>
-                        <Link to='/login' className="nav-hover-btn" >login</Link>
+                        {!user && <Link to='/login' className="nav-hover-btn" >login</Link>}
                         <Link to='profile/basic' className="nav-hover-btn" >Profile</Link>
+
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="nav-hover-btn text-xl"
+                        >
+                            <AiOutlineMenu />
+                        </button>
+
                     </motion.div>
+
+
+                    <motion.div
+                        initial={{}}
+                        animate={{ x: isOpen ? -300 : 0 }}
+                        transition={{ type: "tween", duration: 0.3 }}
+                        className="absolute py-5 right-[-300px] top-14 w-64 rounded-lg bg-black text-white shadow-lg"
+                    >
+                        <button
+                            onClick={() => setIsOpen(!open)}
+                            className="absolute text-white p-4 text-2xl right-10 top-5 hover:text-white"
+                        >
+                            <GiCrossedAxes />
+                        </button>
+                        <nav className="mt-10 flex flex-col gap-4 text-white">
+                            <ProfileButton to='/' name='Home' icon={<HiOutlineHome />} />
+                            <ProfileButton to='profile/basic' name='Profile' icon={<FaUser />} />
+                        </nav>
+                    </motion.div>
+
+
+
 
 
                 </nav>
