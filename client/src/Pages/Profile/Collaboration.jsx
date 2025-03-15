@@ -4,18 +4,19 @@ import useAxiosSecure from "../../Hooks/Axios/useAxiosSecure";
 import { useState } from "react";
 import { imageUpload } from "../../Utils/ImageUpload";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+import { HiUserGroup } from "react-icons/hi";
+import { MdOutlineMessage } from "react-icons/md";
+import Loading from "../Loading/Loading";
 
 const Collaboration = () => {
 
     const axiosSecure = useAxiosSecure();
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
 
     const [edit, setEdit] = useState(false);
     const [type, setType] = useState('');
     const [category, setCategory] = useState('');
-    console.log(type);
-
-
 
     const { data: userData = [] } = useQuery({
         queryKey: ['profile', user?.email],
@@ -36,7 +37,17 @@ const Collaboration = () => {
         }
     });
 
-    const { email, image, name, phone, from, bio, teamName } = userData;
+
+    // my team members details
+    const { data: myMembers = [], isLoading } = useQuery({
+        queryKey: ['myMembers'],
+        queryFn: async () => {
+            const { data } = await axiosSecure.get(`/myTeamMembers/${user?.email}`);
+            return data;
+        }
+    });
+
+
 
     const handleEdit = () => {
         setEdit(!edit);
@@ -63,8 +74,11 @@ const Collaboration = () => {
         };
         await addTeamData(teamData);
         form.reset();
+        setCategory('');
         setEdit(!edit);
     };
+
+    if (loading, isLoading) return <Loading />;
 
     return (
         <div>
@@ -154,7 +168,39 @@ const Collaboration = () => {
 
             {/* My team Members section */}
             <div>
-                <h1 className="font-lexend md:text-3xl text-sm mt-10">My Team Members</h1>
+                <h1 className="font-lexend md:text-3xl text-sm my-10">My Team Members</h1>
+
+                <table className="min-w-full border border-gray-300 bg-[#DFDFF0] shadow-md rounded">
+                    <thead>
+                        <tr className="bg-[#D3D3F0] font-raleway">
+                            <th className="p-2 text-left text-[clamp(8px,2vw,15px)]"></th>
+                            <th className="p-2 text-left text-[clamp(8px,2vw,15px)]">Member</th>
+                            <th className="p-2 text-left text-[clamp(8px,2vw,15px)]">Email</th>
+                            <th className="p-2 text-left text-[clamp(8px,2vw,15px)]">Phone</th>
+                            <th className="p-2 text-left text-[clamp(8px,2vw,15px)]">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {myMembers.map((team, index) => (
+                            <tr key={index} className="border-t border-gray-300">
+                                <td className="p-2">
+                                    <img src={team?.userImage} alt={team.teamName} className="hidden md:block w-10 h-10 rounded-full" />
+                                </td>
+                                <td className="p-2 text-[clamp(8px,2vw,15px)]">{team?.userName}</td>
+                                <td className="p-2 text-[clamp(8px,2vw,15px)]">{team?.joinedMemberEmail}</td>
+                                <td className="p-2 text-[clamp(8px,2vw,15px)]">{team?.userPhone}</td>
+                                <td className="p-2">
+                                    <motion.button
+                                        whileTap={{ scale: 1.3 }}
+                                        className="px-2 py-1 text-sm md:text-xl">
+                                        <MdOutlineMessage />
+                                    </motion.button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
             </div>
 
 
