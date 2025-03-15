@@ -12,6 +12,8 @@ import Skills from "../Pages/Profile/Skills";
 import VolantHistory from "../Pages/Profile/VolantHistory";
 import Availablity from "../Pages/Profile/Availablity";
 import Collaboration from "../Pages/Profile/Collaboration";
+import AllTeams from "../Pages/Profile/AllTeams";
+import Attends from "../Pages/Profile/Attends";
 
 const router = createBrowserRouter([
     {
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
             {
                 path: 'collaboration',
                 element: <Collaboration />
+            },
+            {
+                path: 'allTeams',
+                element: <AllTeams />
+            },
+            {
+                path: 'attends',
+                element: <Attends />
             },
         ]
 

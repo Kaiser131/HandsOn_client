@@ -61,7 +61,7 @@ const Availablity = () => {
                         <img className="md:size-20 size-14 rounded" src={image} alt="mo image found" />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-5 space-y-5 ">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 space-y-5 ">
 
                         <div className="flex flex-col space-y-2 mt-5">
                             <label className="text-sm md:text-base font-bold" htmlFor="name">Availablity</label>

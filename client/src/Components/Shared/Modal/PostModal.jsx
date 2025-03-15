@@ -41,7 +41,7 @@ const PostModal = ({ postModal, setPostModal, children, setLevel }) => {
                         transition={{
                             ease: "easeInOut",
                         }}
-                        className="absolute bottom-0 h-[60vh] w-full overflow-hidden rounded-t-3xl bg-[#DFDFF0]"
+                        className="absolute bottom-0 h-[70vh] w-full overflow-hidden rounded-t-3xl bg-[#DFDFF0]"
                         style={{ y }}
                         drag="y"
                         dragControls={controls}

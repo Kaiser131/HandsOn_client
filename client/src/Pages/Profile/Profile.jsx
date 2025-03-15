@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from "../../Hooks/Axios/useAxiosSecure";
 import useAuth from "../../Hooks/Auth/useAuth";
 import ProfileButton from "../../Components/Shared/Buttons/ProfileButton";
-import { FaPowerOff } from "react-icons/fa";
+import { FaHome, FaPowerOff, FaTeamspeak, FaUsers } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
 import { GiSkills } from "react-icons/gi";
 import { FaHandsHelping } from "react-icons/fa";
@@ -15,7 +15,7 @@ import { motion } from 'framer-motion';
 const Profile = () => {
 
     const axiosSecure = useAxiosSecure();
-    const { user } = useAuth();
+    const { user, logOut } = useAuth();
 
 
     const { data: userData = [] } = useQuery({
@@ -37,7 +37,7 @@ const Profile = () => {
                 {/* top div */}
                 <div className="flex p-5 border-b border-[#262626] gap-2">
                     <div>
-                        <img src={image} alt="no image" className="size-10 md:size-8  rounded-sm" />
+                        <img src={image || user?.photoURL} alt="no image" className="size-10 md:size-8  rounded-sm" />
                     </div>
                     <div className=" text-[9px] md:text-xs">
                         <p className="break-all">{name}</p>
@@ -47,14 +47,18 @@ const Profile = () => {
                 {/* buttons */}
                 <div className="md:px-5 xl:px-10 px-2 py-5">
                     <div className="space-y-5 font-lexend text-[10px] md:text-sm xl:text-base">
+                        <ProfileButton to='/' name='Home' icon={<FaHome />} />
                         <ProfileButton to='basic' name='Basic Info' icon={<FaUserCircle />} />
                         <ProfileButton to='skills' name='Interest' icon={<GiSkills />} />
                         <ProfileButton to='history' name='Contributions' icon={<FaHandsHelping />} />
                         <ProfileButton to='availablity' name='Availability' icon={<MdSchedule />} />
                         <ProfileButton to='collaboration' name='Collaboration' icon={<IoPeopleSharp />} />
+                        <ProfileButton to='allTeams' name='All Teams' icon={<FaTeamspeak />} />
+                        <ProfileButton to='attends' name='Attends' icon={<FaUsers />} />
                     </div>
                     <div className="absolute bottom-5">
                         <motion.button
+                            onClick={logOut}
                             whileTap={{
                                 scale: 0.9
                             }}

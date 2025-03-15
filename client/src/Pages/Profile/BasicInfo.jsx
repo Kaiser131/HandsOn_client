@@ -72,7 +72,7 @@ const BasicInfo = () => {
                         <img className="md:size-20 size-14 rounded" src={image} alt="mo image found" />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-5 space-y-5 ">
+                    <div className="grid md:grid-cols-2 gap-5 space-y-5 ">
 
                         <div className="flex flex-col space-y-2 mt-5">
                             <label className="text-sm md:text-base font-bold" htmlFor="name">Name</label>
@@ -93,22 +93,20 @@ const BasicInfo = () => {
 
                     </div>
 
-                    <div className="grid grid-cols-2 gap-5 mt-10">
 
-                        <div className="flex flex-col space-y-2">
-                            <label className="text-sm md:text-base text-center font-bold" htmlFor="bio">Bio</label>
-                            <input type="text" required name="bio" className="bg-[#DFDFF0] text-[9px] placeholder:font-light md:text-base outline-none placeholder:text-black border-b border-black disabled:cursor-not-allowed text-center" placeholder={bio ? bio : 'Please Add Your Bio'} />
-                        </div>
-
-                        <div className="flex flex-col space-y-2">
-                            <label className="text-sm md:text-base text-center font-bold" htmlFor="image">Update Image</label>
-                            <div className="flex justify-center">
-                                <input type="file" required name="image" className="file:bg-[#DFDFF0] file:text-[9px] md:file:text-base placeholder:text-[9px] outline-none file:border file:rounded-full" id="" />
-                            </div>
-                        </div>
-
-
+                    <div className="flex flex-col space-y-2">
+                        <label className="text-sm md:text-base text-center font-bold" htmlFor="bio">Bio</label>
+                        <input type="text" required name="bio" className="bg-[#DFDFF0] text-[9px] placeholder:font-light md:text-base outline-none placeholder:text-black border-b border-black disabled:cursor-not-allowed text-center" placeholder={bio ? bio : 'Please Add Your Bio'} />
                     </div>
+
+                    <div className="flex flex-col space-y-2 pt-4 md:pt-0">
+                        <label className="text-sm md:text-base text-center font-bold" htmlFor="image">Update Image</label>
+                        <div className="flex justify-center">
+                            <input type="file" required name="image" className="file:bg-[#DFDFF0] w-[150px] md:w-full file:text-[9px] md:file:text-base placeholder:text-[9px] outline-none file:border file:rounded-full" id="" />
+                        </div>
+                    </div>
+
+
 
                     <div className="flex justify-center my-10">
                         <button className={`${edit ? 'block' : 'hidden'} `}>Submit</button>

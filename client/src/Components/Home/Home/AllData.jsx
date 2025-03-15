@@ -18,6 +18,8 @@ import useAxiosSecure from "../../../Hooks/Axios/useAxiosSecure";
 import useAuth from "../../../Hooks/Auth/useAuth";
 import toast from "react-hot-toast";
 import PostModal from "../../Shared/Modal/PostModal";
+import { imageUpload } from "../../../Utils/ImageUpload";
+import EventFeed from "../EventFeed/EventFeed";
 
 const AllData = () => {
 
@@ -35,6 +37,8 @@ const AllData = () => {
         { name: 'Availability', icon: AiOutlineCheckCircle },
     ];
 
+
+    // user Data
     const { data: userData = [] } = useQuery({
         queryKey: ['userData', user?.email],
         queryFn: async () => {
@@ -43,7 +47,17 @@ const AllData = () => {
         }
     });
 
+    // eventFeedData
+    const { data: eventFeedData = [], refetch } = useQuery({
+        queryKey: ['eventFeedData'],
+        queryFn: async () => {
+            const { data } = await axiosSecure.get('/eventFeed');
+            return data;
+        }
+    });
 
+
+    // add posts or events
     const { mutateAsync } = useMutation({
         mutationFn: async (eventFeedData) => {
             const { data } = await axiosSecure.post('/eventFeed', eventFeedData);
@@ -51,11 +65,22 @@ const AllData = () => {
         },
         onSuccess: () => {
             toast.success('Successfully Added !');
+            refetch();
             setEventModal(false);
             setPostModal(false);
         }
     });
 
+    // add attendeeList for events
+    const { mutateAsync: attendeeList } = useMutation({
+        mutationFn: async (attendeeList) => {
+            const { data } = await axiosSecure.patch(`/eventAttendeeLists`, attendeeList);
+            return data;
+        },
+        onSettled: () => {
+            toast.success('Join Successful !');
+        }
+    });
 
 
     const handleEventData = async (e) => {
@@ -67,6 +92,9 @@ const AllData = () => {
         const time = form.time.value;
         const location = form.location.value;
         const createdBy = user?.email;
+        const image = form.image.files[0];
+        const imageURL = await imageUpload(image);
+        const uniqueCode = crypto.randomUUID();
 
         if (!category) {
             return toast.error('Please Select Category!');
@@ -76,6 +104,8 @@ const AllData = () => {
             title,
             description,
             date,
+            imageURL: imageURL,
+            eventCode: uniqueCode,
             createdBy,
             time,
             location,
@@ -85,6 +115,7 @@ const AllData = () => {
 
         await mutateAsync(eventData);
         form.reset();
+        refetch();
     };
 
 
@@ -96,6 +127,9 @@ const AllData = () => {
         const date = form.date.value;
         const time = form.time.value;
         const createdBy = user?.email;
+        const image = form.image.files[0];
+        const imageURL = await imageUpload(image);
+        const uniqueCode = crypto.randomUUID();
 
         if (!level) {
             return toast.error('Please Select Level Of Your Urgency Level !');
@@ -107,12 +141,15 @@ const AllData = () => {
             description,
             date,
             time,
+            postCode: uniqueCode,
             createdBy,
             level,
+            imageURL: imageURL,
             organization: userData?.organization
         };
         await mutateAsync(postData);
         form.reset();
+        refetch();
     };
 
 
@@ -124,10 +161,32 @@ const AllData = () => {
     };
 
 
+
+    const joinEvent = async (eventAttendee) => {
+        if (eventAttendee?.createdBy === user?.email) {
+            return toast.error("Can't Join Own Events !");
+        }
+        const attendeeData = {
+            eventCode: eventAttendee?.eventCode,
+            eventOwner: eventAttendee?.createdBy,
+            title: eventAttendee?.title,
+            imageURL: eventAttendee?.imageURL,
+            time: eventAttendee?.time,
+            location: eventAttendee?.location,
+            date: eventAttendee?.date,
+            joinUser: userData?.email,
+            joinUserName: userData?.name || user?.displayName,
+            phone: userData?.phone
+        };
+        await attendeeList(attendeeData);
+    };
+
+
     return (
         <div className="min-h-screen pt-20">
 
-            <div className=" relative z-20 md:max-w-[60dvw] w-full mx-auto">
+            <div className=" relative z-20 md:max-w-[70dvw] w-full mx-auto">
+
                 <div className=" space-y-3 px-2 text-center">
                     <h1 className="font-lexend text-[clamp(22px,5vw,40px)] ">Welcome To HandsOn</h1>
                     <h1 className="font-lexend text-[clamp(10px,2vw,18px)]">The best platform to reunion</h1>
@@ -215,6 +274,14 @@ const AllData = () => {
                                         <option className="outline-none bg-[#D3D3F0]" value="Community Building & Engagement">Community Building & Engagement</option>
                                     </select>
                                 </div>
+
+                                <div className="flex col-span-2 flex-col space-y-2">
+                                    <label className="text-sm md:text-base text-center" htmlFor="image">Insert Image</label>
+                                    <div className="flex justify-center">
+                                        <input type="file" required name="image" className="file:bg-[#DFDFF0] file:text-[9px] md:file:text-base placeholder:text-[9px] outline-none file:border file:rounded-full" id="" />
+                                    </div>
+                                </div>
+
                             </div>
 
                             <button className="px-8 py-2 border border-black">
@@ -251,15 +318,15 @@ const AllData = () => {
                                     <input type="text" name="location" className="bg-[#DFDFF0] border-b outline-none border-black" />
                                 </div>
 
-                                <div className="flex flex-col">
-                                    <label htmlFor="">Date</label>
-                                    <input type="date" name="date" className="bg-[#DFDFF0] border-b outline-none border-black" />
-                                </div>
-
 
                                 <div className="flex flex-col">
                                     <label htmlFor="">Time</label>
                                     <input type="time" name="time" className="bg-[#DFDFF0] border-b outline-none border-black" />
+                                </div>
+
+                                <div className="flex flex-col">
+                                    <label htmlFor="">Date</label>
+                                    <input type="date" name="date" className="bg-[#DFDFF0] border-b outline-none border-black" />
                                 </div>
 
                                 <div className="flex flex-col">
@@ -271,6 +338,15 @@ const AllData = () => {
                                         <option className="outline-none bg-[#D3D3F0]" value="Urgent">Urgent</option>
                                     </select>
                                 </div>
+
+
+                                <div className="flex col-span-2 flex-col space-y-2">
+                                    <label className="text-sm md:text-base text-center" htmlFor="image">Insert Image</label>
+                                    <div className="flex justify-center">
+                                        <input type="file" required name="image" className="file:bg-[#DFDFF0] file:text-[9px] md:file:text-base placeholder:text-[9px] outline-none file:border file:rounded-full" id="" />
+                                    </div>
+                                </div>
+
                             </div>
 
                             <button className="px-8 py-2 border border-black">
@@ -283,6 +359,9 @@ const AllData = () => {
 
                 </PostModal>
 
+
+                {/* Events Feeds */}
+                <EventFeed joinEvent={joinEvent} eventFeedData={eventFeedData} userData={userData} />
 
             </div>
 
