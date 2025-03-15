@@ -56,6 +56,8 @@ async function run() {
         const eventsFeedDataCollection = db.collection('eventFeedDatas');
         const eventAttendeeListsCollection = db.collection('attendeeLists');
         const commentsCollection = db.collection('comments');
+        const teamsCollection = db.collection('team');
+        const teamsMembersCollection = db.collection('teamMembers');
 
 
         // verify admin middleware
@@ -247,6 +249,38 @@ async function run() {
             res.send(result);
         });
 
+        // get user event attendee list
+        app.get('/eventAttendeeList/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { joinUser: email };
+            const result = await eventAttendeeListsCollection.find(query).toArray();
+            res.send(result);
+        });
+
+
+        // attendeList Delete
+        app.delete('/attendeeList/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await eventAttendeeListsCollection.deleteOne(query);
+            res.send(result);
+        });
+
+
+        // get all comments
+        app.get('/comments', async (req, res) => {
+            const result = await commentsCollection.find().toArray();
+            res.send(result);
+        });
+
+
+        // get specified post comments
+        app.get('/comments/:postCode', async (req, res) => {
+            const postCode = req.params.postCode;
+            const query = { postCode: postCode };
+            const result = await commentsCollection.find(query).toArray();
+            res.send(result);
+        });
 
         // add comments
         app.post('/comments', async (req, res) => {
@@ -255,6 +289,51 @@ async function run() {
             res.send(result);
         });
 
+
+        // add team collection
+        app.post('/team', async (req, res) => {
+            const teamData = req.body;
+            const query = { teamOwner: teamData?.teamOwner };
+            const isExist = await teamsCollection.findOne(query);
+            if (isExist) {
+                return res.send({ message: "cant create new team" });
+            }
+            const result = await teamsCollection.insertOne(teamData);
+            res.send(result);
+        });
+
+
+        // get all team data
+        app.get('/allTeams', async (req, res) => {
+            const result = await teamsCollection.find().toArray();
+            res.send(result);
+        });
+
+
+        // post join team data
+        app.post('/joinTeamMemberData', async (req, res) => {
+            const joinedMemberData = req.body;
+            const query = { teamCode: joinedMemberData?.teamCode };
+            const isExist = await teamsMembersCollection.findOne(query);
+            if (isExist) {
+                return res.send({ message: 'Cant rejoin !' });
+            }
+            const result = await teamsMembersCollection.insertOne(joinedMemberData);
+            res.send(result);
+        });
+
+        app.get('/allTeamMembers', async (req, res) => {
+            const result = await teamsMembersCollection.find().toArray();
+            res.send(result);
+        });
+
+        // my members
+        app.get('/myTeamMembers/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { teamOwner: email };
+            const result = await teamsMembersCollection.find(query).toArray();
+            res.send(result);
+        });
 
 
         // Send a ping to confirm a successful connection
