@@ -39,7 +39,7 @@ const verifyToken = async (req, res, next) => {
     });
 };
 
-const uri = `mongodb+srv://${process.env.DB_USERS}:${process.env.DB_PASSS}@cluster0.tv3to.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.tv3to.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 const client = new MongoClient(uri, {
     serverApi: {
@@ -226,7 +226,16 @@ async function run() {
 
         // get all eventFeedData
         app.get('/eventFeed', async (req, res) => {
-            const result = await eventsFeedDataCollection.find().toArray();
+            const category = req.query.category;
+            const search = req.query.search;
+            let query = {
+                title: { $regex: search, $options: 'i' }
+            };
+            let options = {};
+            if (category) {
+                query = { postType: category };
+            }
+            const result = await eventsFeedDataCollection.find(query).toArray();
             res.send(result);
         });
 
