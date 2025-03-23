@@ -20,7 +20,6 @@ import toast from "react-hot-toast";
 import PostModal from "../../Shared/Modal/PostModal";
 import { imageUpload } from "../../../Utils/ImageUpload";
 import EventFeed from "../EventFeed/EventFeed";
-import WhiteFillupBtn from "../../Shared/Buttons/WhiteFillupBtn";
 
 const AllData = () => {
 
@@ -34,8 +33,8 @@ const AllData = () => {
     const [category, setCategory] = useState();
     const [level, setLevel] = useState();
     const filterDropdownOptionsData = [
-        { name: 'Post', icon: MdCategory },
-        { name: 'Event', icon: FaMapMarkerAlt },
+        { name: 'post', icon: MdCategory },
+        { name: 'event', icon: FaMapMarkerAlt },
     ];
 
 
@@ -50,9 +49,9 @@ const AllData = () => {
 
     // eventFeedData
     const { data: eventFeedData = [], refetch } = useQuery({
-        queryKey: ['eventFeedData', category],
+        queryKey: ['eventFeedData', filterDropDownData, search],
         queryFn: async () => {
-            const { data } = await axiosSecure.get(`/eventFeed?category=${category}&search=${search}`);
+            const { data } = await axiosSecure.get(`/eventFeed?category=${filterDropDownData}&search=${search}`);
             return data;
         }
     });
@@ -169,6 +168,9 @@ const AllData = () => {
         if (eventAttendee?.createdBy === user?.email) {
             return toast.error("Can't Join Own Events !");
         }
+        if (!user) {
+            return toast.error('Please Login To Join');
+        }
         const attendeeData = {
             eventCode: eventAttendee?.eventCode,
             eventOwner: eventAttendee?.createdBy,
@@ -204,8 +206,8 @@ const AllData = () => {
                             // setCurrentPage={setCurrentPage}
                             dropDownOptionsData={filterDropdownOptionsData}
                             dropBtnText="Filter"
+                            setSearch={setSearch}
                             setFilterDropdownData={setFilterDropdownData}
-                        // setSearch={setSearch}
                         />
                     </div>
 

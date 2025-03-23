@@ -113,15 +113,15 @@ const Navbar = () => {
                         initial={{}}
                         animate={{ x: isOpen ? -300 : 0 }}
                         transition={{ type: "tween", duration: 0.3 }}
-                        className="absolute py-5 right-[-300px] top-14 w-64 rounded-lg bg-black text-white shadow-lg"
+                        className="absolute md:py-5 right-[-300px] top-14 w-40 md:w-64 rounded-lg bg-black text-white shadow-lg"
                     >
                         <button
                             onClick={() => setIsOpen(!open)}
-                            className="absolute text-white p-4 text-2xl right-10 top-5 hover:text-white"
+                            className="absolute  text-white p-4 text-xl md:text-2xl right-2 md:right-10 top-5 hover:text-white"
                         >
                             <GiCrossedAxes />
                         </button>
-                        <nav className="mt-10 flex flex-col gap-4 text-white">
+                        <nav className="mt-10 flex flex-col gap-4 text-xs md:text-sm text-white">
                             <ProfileButton to='/' name='Home' icon={<HiOutlineHome />} />
                             <ProfileButton to='profile/basic' name='Profile' icon={<FaUser />} />
                         </nav>

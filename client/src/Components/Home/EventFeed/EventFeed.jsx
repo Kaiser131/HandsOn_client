@@ -18,6 +18,7 @@ const EventFeed = ({ joinEvent, eventFeedData, userData }) => {
     // event SeeMore States
     const [eventSeeMore, setEventSeeMore] = useState(false);
     const [eventCode, setEventCode] = useState('');
+
     const handleEventSeeMore = (event) => {
         if (event === eventCode) {
             setEventSeeMore(!eventSeeMore);
@@ -75,6 +76,9 @@ const EventFeed = ({ joinEvent, eventFeedData, userData }) => {
     // commentBoxData
     const handleComment = async (e, postData) => {
         e.preventDefault();
+        if (!user) {
+            return toast.error('Please Login To Add Comment !');
+        }
         const form = e.target;
         const comment = form.comment.value;
         const commentData = {

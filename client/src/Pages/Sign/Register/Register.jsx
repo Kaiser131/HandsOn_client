@@ -7,6 +7,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useAuth from '../../../Hooks/Auth/useAuth';
 import EncryptButton from '../../../Components/Shared/Buttons/EncryptBtn';
+import Loading from '../../Loading/Loading';
 
 const Register = () => {
 
@@ -50,11 +51,10 @@ const Register = () => {
 
         try {
             const signIn = await createUser(email, password);
-            console.log(signIn);
-            toast.success('User Created Successfully !');
+            logOut();
             if (signIn) {
-                logOut();
                 navigate('/login');
+                toast.success('User Created Successfully !');
                 return toast.success('Please Log In again !');
             }
         } catch (error) {
@@ -71,6 +71,8 @@ const Register = () => {
     };
 
     if (user) return <Navigate to='/' />;
+
+    if (loading) return <Loading />;
 
     return (
         <div
@@ -96,7 +98,7 @@ const Register = () => {
                                 <span onClick={() => setConfirmPassText(!confirmPassText)} className='absolute right-5 top-4'>{confirmPassText ? <FaLock /> : <FaLockOpen />}</span>
                             </div>
                             <span className=''>
-                                <button className='px-5 py-2 border border-white border-opacity-50'>Sign Up</button>
+                                {/* <button className='px-5 py-2 border border-white border-opacity-50'>Sign Up</button> */}
                                 <EncryptButton name='Sign Up' logo={<FaLock />} />
                             </span>
                         </div>

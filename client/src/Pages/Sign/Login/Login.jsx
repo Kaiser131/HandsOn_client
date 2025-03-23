@@ -7,6 +7,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import useAuth from '../../../Hooks/Auth/useAuth';
 import EncryptButton from '../../../Components/Shared/Buttons/EncryptBtn';
+import Loading from '../../Loading/Loading';
 
 const Login = () => {
 
@@ -77,6 +78,7 @@ const Login = () => {
         navigate('/');
     };
 
+    if (loading) return <Loading />;
     if (user) return <Navigate to='/' />;
 
     return (
@@ -120,7 +122,7 @@ const Login = () => {
                         </div>
                     </div>
 
-                    <h1 className='capitalize text-sm text-left text-white'>already have an account ? <Link to='/register' className='hover:text-blue-500 transition-all'>SignUp</Link> </h1>
+                    <h1 className='capitalize text-sm text-left text-white'>Dont have an account ? <Link to='/register' className='hover:text-blue-500 transition-all'>SignUp</Link> </h1>
                 </div>
 
 

@@ -37,7 +37,7 @@ const Option = ({ text, Icon, setOpen, handleDropDownOptionData }) => {
         <motion.li
             variants={itemVariants}
             onClick={() => handleDropDownOptionData(text)}
-            className="flex items-center gap-2 w-full p-2 text-[10px] md:text-xs font-medium whitespace-nowrap rounded-md hover:bg-[#D2D2EF] text-slate-700 transition-colors cursor-pointer z-50"
+            className="flex items-center gap-2 w-full p-2 text-[10px] capitalize md:text-xs font-medium whitespace-nowrap rounded-md hover:bg-[#D2D2EF] text-slate-700 transition-colors cursor-pointer z-50"
         >
             <motion.span variants={actionIconVariants}>
                 <Icon />
